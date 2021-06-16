@@ -13,6 +13,7 @@ import (
 	"net/http/cookiejar"
 	"strings"
 	"time"
+    "encoding/json"
 
 	"golang.org/x/time/rate"
 )
@@ -262,6 +263,13 @@ func (client *api_client) send_request(method string, path string, data string) 
 		return body, errors.New(fmt.Sprintf("Unexpected response code '%d': %s", resp.StatusCode, body))
 	}
 
+	if body == "" {
+		mapD := map[string]string{"response": ""}
+		body2, _ := json.Marshal(mapD)
+    	body := string(body2)
+		return body, nil
+	}
+	
 	return body, nil
 
 }
